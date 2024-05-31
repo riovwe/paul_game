@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pilih Level Game Matematika</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradasi warna dari ungu ke biru */
+      color: white;
+    }
+    .container {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.8); /* Background transparan hitam */
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+    .level-button {
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background-color: #08d;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .level-button:hover {
+      background-color: #05a;
+      transform: scale(1.05);
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pilih Level Game Matematika</h1>
+    <div>
+      <button class="level-button" onclick="goToGame(1)">Level 1 - Mudah</button>
+      <button class="level-button" onclick="goToGame(2)">Level 2 - Mudah</button>
+      <button class="level-button" onclick="goToGame(3)">Level 3 - Mudah</button>
+      <button class="level-button" onclick="goToGame(4)">Level 4 - Mudah</button>
+      <button class="level-button" onclick="goToGame(5)">Level 5 - Mudah</button>
+      <button class="level-button" onclick="goToGame(6)">Level 6 - Sulit</button>
+      <button class="level-button" onclick="goToGame(7)">Level 7 - Sulit</button>
+      <button class="level-button" onclick="goToGame(8)">Level 8 - Sulit</button>
+      <button class="level-button" onclick="goToGame(9)">Level 9 - Sulit</button>
+      <button class="level-button" onclick="goToGame(10)">Level 10 - Sangat Sulit</button>
+    </div>
+  </div>
+
+  <script>
+    function goToGame(level) {
+      window.location.href = 'T-121.html?level=' + level;
+    }
+  </script>
+</body>
+</html>
+

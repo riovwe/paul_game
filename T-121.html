@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game Matematika</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
+      background: linear-gradient(to right, #8e2de2, #4a00e0); /* Gradasi dari ungu gelap ke ungu lebih terang */
+      color: #ffffff; /* Warna teks putih untuk kontras yang baik */
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column; /* Mengatur elemen-elemen secara vertikal */
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: 2.5em; /* Ukuran lebih kecil dari sebelumnya */
+      color: #ffffff;
+      margin-bottom: 0.2em; /* Margin lebih kecil */
+    }
+
+    #timer, #score, #result, #correctCount, #wrongCount {
+      font-size: 1.5em; /* Ukuran font lebih kecil */
+      font-weight: bold;
+      margin: 5px 0; /* Margin lebih kecil */
+      color: #ffffff;
+    }
+
+    input[type="number"], button {
+      padding: 10px 20px; /* Padding lebih kecil */
+      font-size: 1.2em; /* Ukuran font lebih kecil */
+      border: none;
+      border-radius: 5px;
+      margin: 5px; /* Margin lebih kecil */
+      transition: all 0.3s;
+      outline: none;
+      background-color: #34495e; /* Warna gelap untuk input dan button */
+      color: #ffffff; /* Warna teks putih */
+    }
+
+    button {
+      background-color: #16a085; /* Warna tombol gelap yang estetik */
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #149174; /* Warna tombol saat di-hover */
+    }
+
+    .correct, .wrong {
+      font-size: 1.5em; /* Ukuran font lebih kecil */
+      animation-duration: 1s;
+    }
+
+    @keyframes correctFlash {
+      0%, 100% { color: #2ecc71; } /* Warna hijau yang lebih halus */
+      50% { color: #ffffff; }
+    }
+
+    @keyframes wrongFlash {
+      0%, 100% { color: #e74c3c; } /* Warna merah yang lebih halus */
+      50% { color: #c0392b; }
+    }
+
+    footer {
+      width: 100%;
+      padding: 10px 0;
+      background-color: #34495e; /* Warna latar belakang gelap */
+      color: #ffffff; /* Warna teks putih */
+      text-align: center;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 1em;
+    }
+
+    #navbar {
+      width: 100%;
+      background-color: #34495e; /* Warna latar belakang gelap */
+      color: #ffffff; /* Warna teks putih */
+      padding: 10px 0;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Bayangan untuk memberi kedalaman */
+    }
+
+    .answer-stats table {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background-color: #34495e;
+      color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    .answer-stats th, .answer-stats td {
+      padding: 12px 20px;
+      border: 1px solid #ffffff;
+      text-align: center;
+    }
+
+    .answer-stats th {
+      background-color: #16a085;
+      font-size: 1.2em;
+    }
+
+    .answer-stats td {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    #helpButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 5px;
+      background-color: #16a085;
+      color: #ffffff;
+      cursor: pointer;
+      text-decoration: none; /* Menambahkan ini untuk menghilangkan garis bawah teks */
+    }
+
+    #helpButton:hover {
+      background-color: #149174;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .container {
+        animation: fadeIn 1s ease-out 3s forwards; /* durasi 1 detik, delay 3 detik, hanya berjalan sekali untuk fadeIn */
+    }
+
+    .btn-primary {
+      background-color: #34495e; /* Warna gelap */
+      border-color: #34495e; /* Warna border yang sama dengan background */
+    }
+
+    .btn-primary:hover {
+      background-color: #2c3e50; /* Warna lebih gelap saat di-hover */
+      border-color: #2c3e50;
+    }
+
+    #menuButton {
+      position: fixed; /* Membuat tombol tetap di posisi saat halaman digulir */
+      top: 20px; /* Jarak dari atas */
+      right: 20px; /* Jarak dari kanan */
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #16a085; /* Warna latar tombol */
+      color: #ffffff; /* Warna teks */
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #menuButton:hover {
+      background-color: #149174; /* Warna saat di-hover */
+    }
+
+    #homeButton {
+      position: fixed; /* Membuat tombol tetap di posisi saat halaman digulir */
+      top: 20px; /* Jarak dari atas */
+      right: 100px; /* Jarak dari kanan, disesuaikan agar tidak tumpang tindih dengan tombol menu jika ada */
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #3498db; /* Warna latar tombol biru */
+      color: #ffffff; /* Warna teks putih */
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #homeButton:hover {
+      background-color: #2980b9; /* Warna saat di-hover */
+    }
+
+    #contactDeveloperButton {
+      position: fixed; /* Membuat tombol tetap di posisi saat halaman digulir */
+      top: 60px; /* Jarak dari atas, disesuaikan agar tidak tumpang tindih dengan tombol home jika ada */
+      right: 20px; /* Jarak dari kanan */
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #2980b9; /* Warna latar tombol biru */
+      color: #ffffff; /* Warna teks putih */
+      cursor: pointer;
+  </style>
+</head>
+<body>
+  <button id="menuButton" onclick="window.location.href='T-122.html'">Menu</button>
+  <button id="homeButton" onclick="window.location.href='T-120.html'">Home</button>
+  <div class="container">
+    <h1>Game Matematika</h1>
+    <p id="question" class="lead">Pertanyaan matematika muncul di sini</p>
+    <div id="timer" class="h3">20</div>
+    <div id="level" class="h3">Level: 1</div>
+    <input type="number" id="answer" class="form-control" placeholder="Masukkan jawaban">
+    <button type="button" onclick="checkAnswer()">Kirim Jawaban</button>
+    <p id="result" class="h5">Hasil jawaban akan muncul di sini</p>
+    <div id="scoreboard" class="answer-stats">
+      <table>
+        <thead>
+          <tr>
+            <th>Jawaban Benar</th>
+            <th>Jawaban Salah</th>
+            <th>Skor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="displayCorrectCount">0</td>
+            <td id="displayWrongCount">0</td>
+            <td id="displayScore">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let correctAnswer;
+    let countdown;
+    let score = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let currentLevel = parseInt(new URLSearchParams(window.location.search).get('level'), 10) || 1;
+
+    document.getElementById('level').textContent = `Level: ${currentLevel}`;
+
+    function generateQuestion() {
+      let maxNumber = currentLevel <= 5 ? 10 : 20 + (currentLevel - 5) * 5;
+      let num1 = Math.floor(Math.random() * maxNumber);
+      let num2 = Math.floor(Math.random() * maxNumber);
+      const operations = ['+', '-', '*', '/'];
+      const selectedOperation = operations[Math.floor(Math.random() * operations.length)];
+
+      if (selectedOperation === '/' && num2 === 0) { num2 = 1; } // Memastikan tidak ada pembagian dengan nol
+
+      let question;
+      switch (selectedOperation) {
+        case '+':
+          question = `Berapa ${num1} + ${num2}?`;
+          correctAnswer = num1 + num2;
+          break;
+        case '-':
+          question = `Berapa ${num1} - ${num2}?`;
+          correctAnswer = num1 - num2;
+          break;
+        case '*':
+          question = `Berapa ${num1} * ${num2}?`;
+          correctAnswer = num1 * num2;
+          break;
+        case '/':
+          question = `Berapa ${num1} dibagi ${num2}?`;
+          correctAnswer = Math.floor(num1 / num2);
+          break;
+      }
+
+      document.getElementById('question').textContent = question;
+      return correctAnswer;
+    }
+
+    function checkAnswer() {
+      const userAnswer = parseInt(document.getElementById('answer').value, 10);
+      if (!isNaN(userAnswer) && userAnswer === correctAnswer) {
+        document.getElementById('result').textContent = 'Benar!';
+        score += 10;
+        correctCount++;
+        document.getElementById('displayCorrectCount').textContent = correctCount;
+        document.getElementById('displayScore').textContent = score;
+      } else {
+        document.getElementById('result').textContent = `Salah, jawaban yang benar adalah ${correctAnswer}. Coba lagi!`;
+        wrongCount++;
+        document.getElementById('displayWrongCount').textContent = wrongCount;
+      }
+      generateQuestion();
+    }
+
+    function startTimer(duration) {
+      let timer = duration, seconds;
+      countdown = setInterval(function () {
+        seconds = parseInt(timer, 10);
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        document.getElementById('timer').textContent = "00:" + seconds;
+
+        if (--timer < 0) {
+          document.getElementById('result').textContent = "Waktu habis! Skor akhir: " + score;
+          clearInterval(countdown);
+        }
+      }, 1000);
+    }
+
+    window.onload = function() {
+      generateQuestion();
+      startTimer(20);
+    };
+
+    document.getElementById('answer').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        checkAnswer();
+      }
+    });
+  </script>
+</body>
+</html>
